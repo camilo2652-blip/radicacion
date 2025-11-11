@@ -9,11 +9,13 @@ return new class extends Migration {
     {
         Schema::create('notificaciones', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('radicado_id')->constrained('radicados')->onDelete('cascade');
-            $table->string('canal'); // correo o WhatsApp
-            $table->string('mensaje');
-            $table->timestamp('enviado_en')->nullable();
+            $table->unsignedBigInteger('user_id'); // A quién va dirigida
+            $table->string('titulo');
+            $table->text('mensaje');
+            $table->boolean('leida')->default(false);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

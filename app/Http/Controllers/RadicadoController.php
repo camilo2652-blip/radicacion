@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Radicado;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\Notificacion;
+
 
 class RadicadoController extends Controller
 {
@@ -51,6 +53,8 @@ class RadicadoController extends Controller
         'descripcion' => $validated['descripcion'],
         'archivo' => $rutaArchivo,
     ]);
+
+    
 
     // Enviar correo de confirmación
     \Illuminate\Support\Facades\Mail::to(\Illuminate\Support\Facades\Auth::user()->email)
