@@ -24,6 +24,12 @@ class Radicado extends Model
         return $this->hasMany(Notificacion::class, 'radicado_id');
     }
 
+    public function ciudadano()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+
+
     // 🔹 Relación: un radicado pertenece a un usuario
     public function user()
     {

@@ -3,7 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\CheckRole; // 👈 Agrega esta línea
+use App\Http\Middleware\CheckRole;
+use App\Http\Middleware\EsAdministrador; // 👈 Agrega esta línea
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,14 +13,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // 👇 Aquí registras tu middleware personalizado
+        // 👇 Aquí registras tus middlewares personalizados
         $middleware->alias([
             'checkrole' => CheckRole::class,
+            'esadmin' => EsAdministrador::class, // 👈 Agrega este alias
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })
     ->create();
+
 
     

@@ -78,6 +78,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+use App\Http\Controllers\AdminController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin/usuarios', [AdminController::class, 'index'])->name('admin.usuarios.index');
+        Route::get('/admin/usuarios/create', [AdminController::class, 'create'])->name('admin.usuarios.create');
+        Route::post('/admin/usuarios', [AdminController::class, 'store'])->name('admin.usuarios.store');
+    });
+});
+
+
 
 //use App\Http\Controllers\NotificacionController;
 
@@ -85,5 +96,47 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('ciudadano.notificaciones');
     Route::get('/notificaciones/{id}/leida', [NotificacionController::class, 'marcarLeida'])->name('notificaciones.leida');
 });
+
+// 🧩 DASHBOARD ADMINISTRADOR
+
+
+Route::middleware(['auth', 'checkrole:administrador'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::post('/admin/usuarios', [AdminController::class, 'store'])->name('admin.usuarios.store');
+    Route::put('/admin/usuarios/{id}', [AdminController::class, 'update'])->name('admin.usuarios.update');
+    Route::delete('/admin/usuarios/{id}', [AdminController::class, 'destroy'])->name('admin.usuarios.destroy');
+Route::middleware(['auth', 'checkrole:administrador'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
+
+    // Usuarios
+    Route::get('/usuarios', [App\Http\Controllers\AdminUsuarioController::class, 'index'])->name('admin.usuarios.index');
+    Route::get('/usuarios/crear', [App\Http\Controllers\AdminUsuarioController::class, 'create'])->name('admin.usuarios.create');
+    Route::post('/usuarios', [App\Http\Controllers\AdminUsuarioController::class, 'store'])->name('admin.usuarios.store');
+    Route::get('/usuarios/{id}/editar', [App\Http\Controllers\AdminUsuarioController::class, 'edit'])->name('admin.usuarios.edit');
+    Route::put('/usuarios/{id}', [App\Http\Controllers\AdminUsuarioController::class, 'update'])->name('admin.usuarios.update');
+    Route::delete('/usuarios/{id}', [App\Http\Controllers\AdminUsuarioController::class, 'destroy'])->name('admin.usuarios.destroy');
+
+    // Histórico de radicaciones
+    Route::get('/historico', [App\Http\Controllers\AdminController::class, 'historico'])->name('admin.historico');
+});
+
+
+});
+
+
+// 🧩 DASHBOARD VENTANILLA
+Route::middleware(['auth', 'checkrole:ventanilla'])->group(function () {
+    Route::get('/ventanilla/dashboard', function () {
+        return view('ventanilla.dashboard');
+    })->name('ventanilla.dashboard');
+});
+
+// 🧩 DASHBOARD DEPENDENCIA
+Route::middleware(['auth', 'checkrole:dependencia'])->group(function () {
+    Route::get('/dependencia/dashboard', function () {
+        return view('dependencia.dashboard');
+    })->name('dependencia.dashboard');
+});
+
 
 require __DIR__ . '/auth.php';
