@@ -1,7 +1,9 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
+
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
@@ -12,9 +14,45 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('ciudadano.dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Inicio') }}
-                    </x-nav-link>
+
+                    @php
+                        $rol = Auth::user()->rol ?? null;
+                    @endphp
+
+                    @if ($rol === 'administrador')
+                        <x-nav-link 
+                            :href="route('admin.dashboard')" 
+                            :active="request()->routeIs('admin.dashboard')"
+                        >
+                            {{ __('Inicio') }}
+                        </x-nav-link>
+
+                    @elseif ($rol === 'ciudadano')
+                        <x-nav-link 
+                            :href="route('ciudadano.dashboard')" 
+                            :active="request()->routeIs('ciudadano.dashboard')"
+                        >
+                            {{ __('Inicio') }}
+                        </x-nav-link>
+
+                    @elseif ($rol === 'ventanilla')
+                        <x-nav-link 
+                            :href="route('ventanilla.dashboard')" 
+                            :active="request()->routeIs('ventanilla.dashboard')"
+                        >
+                            {{ __('Inicio') }}
+                        </x-nav-link>
+
+                    @elseif ($rol === 'dependencia')
+                        <x-nav-link 
+                            :href="route('dependencia.dashboard')" 
+                            :active="request()->routeIs('dependencia.dashboard')"
+                        >
+                            {{ __('Inicio') }}
+                        </x-nav-link>
+
+                    @endif
+
                 </div>
             </div>
 
@@ -54,22 +92,64 @@
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                <button @click="open = ! open" 
+                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <path :class="{ 'hidden': open, 'inline-flex': ! open }" 
+                              class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{ 'hidden': ! open, 'inline-flex': open }" 
+                              class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
+
         </div>
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{ 'block': open, 'hidden': ! open }" class="hidden sm:hidden">
+
+        @php
+            $rol = Auth::user()->rol ?? null;
+        @endphp
+
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('ciudadano.dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Inicio') }}
-            </x-responsive-nav-link>
+
+            @if ($rol === 'administrador')
+                <x-responsive-nav-link 
+                    :href="route('admin.dashboard')" 
+                    :active="request()->routeIs('admin.dashboard')"
+                >
+                    {{ __('Inicio') }}
+                </x-responsive-nav-link>
+
+            @elseif ($rol === 'ciudadano')
+                <x-responsive-nav-link 
+                    :href="route('ciudadano.dashboard')" 
+                    :active="request()->routeIs('ciudadano.dashboard')"
+                >
+                    {{ __('Inicio') }}
+                </x-responsive-nav-link>
+
+            @elseif ($rol === 'ventanilla')
+                <x-responsive-nav-link 
+                    :href="route('ventanilla.dashboard')" 
+                    :active="request()->routeIs('ventanilla.dashboard')"
+                >
+                    {{ __('Inicio') }}
+                </x-responsive-nav-link>
+
+            @elseif ($rol === 'dependencia')
+                <x-responsive-nav-link 
+                    :href="route('dependencia.dashboard')" 
+                    :active="request()->routeIs('dependencia.dashboard')"
+                >
+                    {{ __('Inicio') }}
+                </x-responsive-nav-link>
+            @endif
+
         </div>
 
         <!-- Responsive Settings Options -->
@@ -89,12 +169,12 @@
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                            onclick="event.preventDefault(); this.closest('form').submit();">
                         {{ __('Finalizar Sesión') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
         </div>
+
     </div>
 </nav>
