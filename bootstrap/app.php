@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'checkrole' => CheckRole::class,
             'esadmin' => EsAdministrador::class, // 👈 Agrega este alias
             //'admin' => \App\Http\Middleware\AdminAccess::class,
+            'redirect.role' => App\Http\Middleware\RedirectIfRoleMismatch::class,
         ]);
 
 

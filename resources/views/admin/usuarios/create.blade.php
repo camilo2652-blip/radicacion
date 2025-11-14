@@ -43,7 +43,7 @@
             </div>
 
             <div class="flex justify-end space-x-2 mt-4">
-                <a href="{{ route('admin.usuarios.index') }}" class="px-4 py-2 border rounded hover:bg-gray-100">Cancelar</a>
+                <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 border rounded hover:bg-gray-100">Cancelar</a>
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Guardar</button>
             </div>
         </form>

@@ -22,29 +22,24 @@ class AuthenticatedSessionController extends Controller
      * Manejar la autenticación
      */
     public function store(Request $request): RedirectResponse
-    {
-        // Validar campos
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-            'rol' => 'required|string|in:ciudadano,ventanilla,dependencia,administrador',
+{
+    // Validar campos solo email y password
+    $request->validate([
+        'email' => 'required|string|email',
+        'password' => 'required|string',
+    ]);
+
+    // Intentar login con email + password
+    if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        return back()->withErrors([
+            'email' => __('Las credenciales no coinciden.'),
         ]);
+    }
 
-        // Intentar login con email + password + rol
-        if (!Auth::attempt([
-            'email' => $request->email,
-            'password' => $request->password,
-            'rol' => $request->rol
-        ], $request->boolean('remember'))) {
-            return back()->withErrors([
-                'email' => __('Las credenciales no coinciden con el rol seleccionado.'),
-            ]);
-        }
+    // Login exitoso
+    $request->session()->regenerate();
 
-        // Login exitoso
-        $request->session()->regenerate();
-
-        // 🔹 Aquí va tu switch para redirigir según rol
+    // Redirigir según rol automáticamente
     switch(Auth::user()->rol) {
         case 'administrador':
             return redirect()->route('admin.dashboard');
@@ -55,9 +50,9 @@ class AuthenticatedSessionController extends Controller
         case 'ciudadano':
             return redirect()->route('ciudadano.dashboard');
         default:
-            return redirect(RouteServiceProvider::HOME);
-        }
+            return redirect()->route('dashboard');
     }
+}
 
     /**
      * Cerrar sesión

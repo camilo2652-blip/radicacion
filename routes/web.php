@@ -13,7 +13,6 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminUsuarioController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Página inicial
@@ -26,13 +25,16 @@ Route::get('/', function () {
                 return redirect()->route('ciudadano.dashboard');
             case 'administrador':
                 return redirect()->route('admin.dashboard');
+            case 'ventanilla':
+                return redirect()->route('ventanilla.dashboard');
+            case 'dependencia':
+                return redirect()->route('dependencia.dashboard');
             default:
                 return redirect()->route('dashboard');
         }
     }
     return redirect()->route('login');
 });
-
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +49,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | Dashboard general
@@ -57,13 +58,12 @@ Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-
 /*
 |--------------------------------------------------------------------------
 | Módulo Ciudadano
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'checkrole:ciudadano'])
+Route::middleware(['auth', 'redirect.role:ciudadano'])
     ->prefix('ciudadano')
     ->name('ciudadano.')
     ->group(function () {
@@ -77,7 +77,6 @@ Route::middleware(['auth', 'checkrole:ciudadano'])
         Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
     });
 
-
 /*
 |--------------------------------------------------------------------------
 | Perfil usuario
@@ -89,7 +88,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | Notificaciones generales
@@ -100,13 +98,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notificaciones/{id}/leida', [NotificacionController::class, 'marcarLeida'])->name('notificaciones.leida');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | ADMINISTRACIÓN
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'checkrole:administrador'])
+Route::middleware(['auth', 'redirect.role:administrador'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -124,25 +121,22 @@ Route::middleware(['auth', 'checkrole:administrador'])
         Route::get('/historico', [AdminController::class, 'historico'])->name('historico');
     });
 
-
 /*
 |--------------------------------------------------------------------------
 | Ventanilla
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'checkrole:ventanilla'])->group(function () {
+Route::middleware(['auth', 'redirect.role:ventanilla'])->group(function () {
     Route::get('/ventanilla/dashboard', fn() => view('ventanilla.dashboard'))->name('ventanilla.dashboard');
 });
-
 
 /*
 |--------------------------------------------------------------------------
 | Dependencia
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'checkrole:dependencia'])->group(function () {
+Route::middleware(['auth', 'redirect.role:dependencia'])->group(function () {
     Route::get('/dependencia/dashboard', fn() => view('dependencia.dashboard'))->name('dependencia.dashboard');
 });
-
 
 require __DIR__.'/auth.php';

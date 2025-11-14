@@ -26,7 +26,7 @@ class AdminUsuarioController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+            'password' => 'required|string|min:6|confirmed', // <- 'confirmed' requiere password_confirmation
             'rol' => 'required'
         ]);
 
