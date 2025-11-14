@@ -37,24 +37,26 @@
             <x-input-error :messages="$errors->get('direccion')" class="mt-2" />
         </div>
 
-        <!-- Contraseña -->
-        <div class="mt-4">
+        <!-- Contraseña y Confirmación con un solo botón (mono) -->
+        <div class="mt-4 relative">
             <x-input-label for="password" :value="__('Contraseña')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <input id="password" type="password" name="password" required autocomplete="new-password"
+                   class="block mt-1 w-full border-gray-300 rounded-md shadow-sm pr-10" placeholder="Contraseña" />
 
-        <!-- Confirmar Contraseña -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirmar Contraseña')" />
-            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
+            <input id="password_confirmation" type="password" name="password_confirmation" required
+                   class="block mt-1 w-full border-gray-300 rounded-md shadow-sm pr-10 mt-2" placeholder="Confirmar Contraseña" />
+
+            <!-- Botón del mono -->
+            <button type="button" id="togglePasswords" class="absolute top-2 right-3 flex items-center text-gray-400">🙈</button>
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
         <!-- Botón de registro -->
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                {{ __('Ya Estás Registrado?') }}
+                {{ __('Ya estás registrado?') }}
             </a>
 
             <x-primary-button class="ms-4">
@@ -62,4 +64,18 @@
             </x-primary-button>
         </div>
     </form>
+
+    <!-- Script para mostrar/ocultar contraseñas -->
+    <script>
+        const togglePasswords = document.querySelector('#togglePasswords');
+        const password = document.querySelector('#password');
+        const passwordConfirmation = document.querySelector('#password_confirmation');
+
+        togglePasswords.addEventListener('click', () => {
+            const isHidden = password.type === 'password';
+            password.type = isHidden ? 'text' : 'password';
+            passwordConfirmation.type = isHidden ? 'text' : 'password';
+            togglePasswords.textContent = isHidden ? '🙉' : '🙈';
+        });
+    </script>
 </x-guest-layout>

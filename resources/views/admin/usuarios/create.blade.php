@@ -32,14 +32,15 @@
                 <input type="email" name="email" class="border rounded px-3 py-2 w-full max-w-md" required>
             </div>
 
-            <div>
+            <!-- Contraseña y Confirmar Contraseña con un solo botón -->
+            <div class="relative">
                 <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-                <input type="password" name="password" class="border rounded px-3 py-2 w-full max-w-md" required>
-            </div>
+                <input id="password" type="password" name="password" class="border rounded px-3 py-2 w-full max-w-md pr-10" required>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Confirmar Contraseña</label>
-                <input type="password" name="password_confirmation" class="border rounded px-3 py-2 w-full max-w-md" required>
+                <label class="block text-sm font-medium text-gray-700 mt-4">Confirmar Contraseña</label>
+                <input id="password_confirmation" type="password" name="password_confirmation" class="border rounded px-3 py-2 w-full max-w-md pr-10" required>
+
+                <button type="button" id="togglePasswords" class="absolute top-2 right-3 flex items-center text-gray-400 text-lg">🙈</button>
             </div>
 
             <div class="flex justify-end space-x-2 mt-4">
@@ -48,4 +49,17 @@
             </div>
         </form>
     </div>
+
+    <script>
+        const togglePasswords = document.querySelector('#togglePasswords');
+        const password = document.querySelector('#password');
+        const passwordConfirmation = document.querySelector('#password_confirmation');
+
+        togglePasswords.addEventListener('click', () => {
+            const type = password.type === 'password' ? 'text' : 'password';
+            password.type = type;
+            passwordConfirmation.type = type;
+            togglePasswords.textContent = type === 'password' ? '🙈' : '🙉';
+        });
+    </script>
 </x-app-layout>
