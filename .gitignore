@@ -1,24 +1,44 @@
+# Logs
 *.log
+npm-debug.log
+yarn-error.log
+
+# System files
 .DS_Store
+Thumbs.db
+
+# Environment
 .env
 .env.backup
 .env.production
-.phpactor.json
-.phpunit.result.cache
-/.fleet
+
+# IDEs & tools
 /.idea
-/.nova
-/.phpunit.cache
 /.vscode
 /.zed
-/auth.json
+/.fleet
+.phpactor.json
+.phpunit.result.cache
+auth.json
+
+# Laravel / PHP
+/vendor
 /node_modules
 /public/build
 /public/hot
 /public/storage
 /storage/*.key
 /storage/pail
-/vendor
+
+# Homestead
 Homestead.json
 Homestead.yaml
-Thumbs.db
+/.vagrant
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+
+# Laravel 5 & Lumen specific with changed public path
+public_html/storage
+public_html/hot
